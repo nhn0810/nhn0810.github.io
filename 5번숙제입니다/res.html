@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>남훈랜드</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .current-time {
+            font-size: 24px;
+            color: gray;
+            margin-top: 20px;
+        }
+        .box {
+            margin-top: 50px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        label {
+            margin-right: 10px;
+        }
+        input[type="number"], select {
+            padding: 5px;
+            font-size: 14px;
+            width: 60px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .reservation-list {
+            margin-top: 30px;
+        }
+        .plan-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="time" id="time"></div>
+    <div class="box">
+        <h1>남훈랜드</h1>
+        <div class="plan">
+            <div class="form">
+                <label>입장권 (어른: 7000원, 어린이: 4000원)</label>
+                <label for="admission-adultcount">어른:</label>
+                <input type="number" id="admission-adultcount" value="0" min="0">
+                <label for="admission-childcount">어린이:</label>
+                <input type="number" id="admission-childcount" value="0" min="0">
+            </div>
+            <div class="form">
+                <label>자유이용권 (어른: 15000원, 어린이: 12000원)</label>
+                <label for="freedom-adultcount">어른:</label>
+                <input type="number" id="freedom-adultcount" value="0" min="0">
+                <label for="freedom-childcount">어린이:</label>
+                <input type="number" id="freedom-childcount" value="0" min="0">
+            </div>
+            <div class="form">
+                <label>BIG3이용권 (어른: 10000원, 어린이: 7000원)</label>
+                <label for="big3-adultcount">어른:</label>
+                <input type="number" id="big3-adultcount" value="0" min="0">
+                <label for="big3-childcount">어린이:</label>
+                <input type="number" id="big3-childcount" value="0" min="0">
+            </div>
+            <div class="form">
+                <label>연간이용권 (어른: 70000원, 어린이: 50000원)</label>
+                <label for="annual-adultcount">어른:</label>
+                <input type="number" id="annual-adultcount" value="0" min="0">
+                <label for="annual-childcount">어린이:</label>
+                <input type="number" id="annual-childcount" value="0" min="0">
+            </div>
+        </div>
+        <div class="form">
+            <label for="name">이름:</label>
+            <input type="text" id="name" required>
+        </div>
+        <button onclick="makeReservation()">예약</button>
+        <div class="reservation" id="reservation"></div>
+    </div>
+    <script>
+        const prices = {
+            '입장권': { adult: 7000, child: 4000 },
+            '자유이용권': { adult: 15000, child: 12000 },
+            'BIG3이용권': { adult: 10000, child: 7000 },
+            '연간이용권': { adult: 70000, child: 50000 }
+        };
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('time').textContent = now.toLocaleString();
+        }
+
+        function makeReservation() {
+            const name = document.getElementById('name').value;
+            if (!name) {
+                alert('이름을 입력해주세요.');
+                return;
+            }
+
+            const plans = [
+                { id: 'admission', name: '입장권' },
+                { id: 'freedom', name: '자유이용권' },
+                { id: 'big3', name: 'BIG3이용권' },
+                { id: 'annual', name: '연간이용권' }
+            ];
+
+            let totalPrice = 0;
+            let reservationDetails = `<p>이름: ${name}<br>`;
+
+            plans.forEach(plan => {
+                const adultCount = parseInt(document.getElementById(`${plan.id}-adultcount`).value);
+                const childCount = parseInt(document.getElementById(`${plan.id}-childcount`).value);
+                if (adultCount > 0 || childCount > 0) {
+                    const adultPrice = prices[plan.name].adult;
+                    const childPrice = prices[plan.name].child;
+                    const planTotal = (adultCount * adultPrice) + (childCount * childPrice);
+                    totalPrice += planTotal;
+                    reservationDetails += `${plan.name} - 어른: ${adultCount}명, 어린이: ${childCount}명, 가격: ${planTotal}원<br>`;
+                }
+            });
+
+            reservationDetails += `총 가격: ${totalPrice}원<br>예약 시간: ${new Date().toLocaleString()}</p>`;
+
+            if (totalPrice === 0) {
+                alert('최소 하나의 이용권을 선택해주세요.');
+                return;
+            }
+
+            const reservationList = document.getElementById('reservation');
+            reservationList.innerHTML += reservationDetails;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>
