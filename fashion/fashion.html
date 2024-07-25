@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaekyangTREND</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 5em;
+            z-index: 3;
+        }
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 20px;
+            padding-top: 60px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            height: 250px;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        .gallery-item .caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: pre-line; /* 줄 바꿈을 지원 */
+        }
+        .gallery-item:hover .caption {
+            opacity: 1;
+        }
+        .text-container {
+            margin-top: 40px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .text-container p {
+            font-size: 1em;
+            color: #333;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            max-width: 800px;
+            width: 90%;
+            display: flex;
+            flex-direction: row;
+        }
+        .modal-content img {
+            max-width: 50%;
+            margin-right: 20px;
+        }
+        .modal-content .description {
+            max-width: 50%;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sticky-header">BaekyangTREND</div>
+
+    <div class="container">
+        <div class="gallery">
+            <div class="gallery-item" onclick="openModal('fashion1.jpg', '“안아줘요!”<br><br>속상한 하루 나를 위로해주는 귀여운 곰인형')">
+                <img src="fashion1.jpg" alt="Fashion 1">
+                <div class="caption">“안아줘요!”<br><br>속상한 하루 나를 위로해주는 귀여운 곰인형</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('fashion2.jpg', '“편안한 밤, 상쾌한 아침”<br><br>어떤 몸부림도 ok!<br>포근한 느낌을 주는 푸른 줄무늬 잠옷')">
+                <img src="fashion2.jpg" alt="Fashion 2">
+                <div class="caption">“편안한 밤, 상쾌한 아침”<br><br>어떤 몸부림도 ok!<br>포근한 느낌을 주는 푸른 줄무늬 잠옷</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('fashion3.jpg', '“거울아, 거울아 세상에서 누가 제일 예쁘지?”<br>“일단 당신은 아닙니다”<br><br>이것만 있다면 나도 공주?<br>마법 지팡이로 예뻐져라 얍!')">
+                <img src="fashion3.jpg" alt="Fashion 3">
+                <div class="caption">“거울아, 거울아 세상에서 누가 제일 예쁘지?”<br>“일단 당신은 아닙니다”<br><br>이것만 있다면 나도 공주?<br>마법 지팡이로 예뻐져라 얍!</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('fashion4.jpg', '“이봐, 김씨 빨리빨리 하란 말이야”<br><br>무더운 더위 속에서도 빛나는 작업반장의 검정조끼')">
+                <img src="fashion4.jpg" alt="Fashion 4">
+                <div class="caption">“이봐, 김씨 빨리빨리 하란 말이야”<br><br>무더운 더위 속에서도 빛나는 작업반장의 검정조끼</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('fashion5.jpg', '“어? 꽃밖에 없네?”<br><br>더운 햇빛 아래 흔들리는 꽃잎드레스<br>꽃이 져도 너는 나의 봄이야')">
+                <img src="fashion5.jpg" alt="Fashion 5">
+                <div class="caption">“어? 꽃밖에 없네?”<br><br>더운 햇빛 아래 흔들리는 꽃잎드레스<br>꽃이 져도 너는 나의 봄이야</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('fashion6.jpg', '“충성! 이병 이상준!”<br><br>친숙한듯한 이 기분, 군인으로 변신!')">
+                <img src="fashion6.jpg" alt="Fashion 6">
+                <div class="caption">“충성! 이병 이상준!”<br><br>친숙한듯한 이 기분, 군인으로 변신!</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('fashion7.jpg', '“배에 물 한방울 젖지 않게 해줄게”<br><br>손에 물 한방울 묻히지 않게 할게 자매품<br>적당한 기장으로 패션센스도 Up!')">
+                <img src="fashion7.jpg" alt="Fashion 7">
+                <div class="caption">“배에 물 한방울 젖지 않게 해줄게”<br><br>손에 물 한방울 묻히지 않게 할게 자매품<br>적당한 기장으로 패션센스도 Up!</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('fashion8.jpg', '“죄인이지만 죄수복은 아니라구요!”<br><br>다리가 얇아 고민인 당신, 시선을 좌우로 분산시켜 <br>두께감을 늘려주는 스트라이프 바지!')">
+                <img src="fashion8.jpg" alt="Fashion 8">
+                <div class="caption">“죄인이지만 죄수복은 아니라구요!”<br><br>다리가 얇아 고민인 당신, 시선을 좌우로 분산시켜 두께감을 늘려주는 스트라이프 바지!”</div>
+            </div>
+        </div>
+
+        <div id="myModal" class="modal">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-content">
+                <img id="modalImg" src="" alt="">
+                <div class="description" id="modalDescription"></div>
+            </div>
+        </div>
+
+        <div class="text-container">
+            <p><br><br>*모조품에 의해 발생하는 피해는 책임지지 않습니다.</p>
+        </div>
+    </div>
+
+    <script>
+        function openModal(imageSrc, description) {
+            document.getElementById('myModal').style.display = 'flex';
+            document.getElementById('modalImg').src = imageSrc;
+            document.getElementById('modalDescription').innerHTML = description; // Use innerHTML to parse HTML tags
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
